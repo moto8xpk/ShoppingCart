@@ -1,0 +1,230 @@
+<div id="top-bar" class="row">
+    <button type="button" (click)="open(contentRegister)" class="btn btn-primary">Insert New Product</button>
+</div>
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Image Link</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody *ngIf="products?.length != 0">
+        <tr *ngFor="let product of products">
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.productCategory.name}}</td>
+            <td>{{ product.desc }}</td>
+            <td>{{ product.imagelink }}</td>
+            <td>
+                <a (click)="onDeleteProduct(product.id)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </a>
+                -
+                <a (click)="onUpdate(content,product.id)">
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Product</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+
+        <form (ngSubmit)="onUpdateSubmit()" #productForm="ngForm">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Product Name</label>
+                <input type="text" class="form-control" id="name" [(ngModel)]="product.name" name="name" #name="ngModel"
+                    required placeholder="Enter Product Name">
+                <small id="emailHelp" class="form-text text-muted"></small>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div *ngIf="name?.errors?.required">
+                        Product Name is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Price</label>
+                <input type="text" class="form-control" id="price" [(ngModel)]="product.price" name="price" #price="ngModel"
+                    required placeholder="Enter Price">
+                <small id="emailHelp" class="form-text text-muted"></small>
+                <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert alert-danger">
+                    <div *ngIf="price?.errors?.required">
+                        Price is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group purple-border">
+                    <label for="exampleFormControlTextarea4">Description</label>
+                    <textarea class="form-control" id="desc" [(ngModel)]="product.desc" name="desc" #desc="ngModel" rows="3"></textarea>
+                </div>
+
+                <small id="emailHelp" class="form-text text-muted"></small>
+                <div *ngIf="desc.invalid && (desc.dirty || address.touched)" class="alert alert-danger">
+                    <div *ngIf="desc?.errors?.required">
+                        Dessciption is required
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail1">Category Name</label>
+                <input type="text" class="form-control" id="productcatename" [(ngModel)]="product.productCategoryName" name="productcatename" #productcatename="ngModel"
+                    required placeholder="Enter Category Name">
+                <small id="emailHelp" class="form-text text-muted"></small>
+                
+                <div *ngIf="productcatename.invalid && (productcatename.dirty || productcatename.touched)" class="alert alert-danger">
+                    <div *ngIf="productcatename?.errors?.required">
+                        Category Name is required
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div *ngIf="currentFileUpload" class="progress" style="width:400px">
+                <div class="progress-bar progress-bar-info progress-bar-striped"
+                    role="progressbar" attr.aria-valuenow="{{progress.percentage}}"
+                    aria-valuemin="0" aria-valuemax="100"
+                    [ngStyle]="{width:progress.percentage+'%'}">
+                    {{progress.percentage}}%</div>
+            </div>
+             
+            <label class="btn btn-default"> 
+                <input type="file" (change)="selectFile($event)">
+            </label>
+             
+            <button class="btn btn-success" [disabled]="!selectedFiles"
+                (click)="upload()">Upload</button> -->
+
+            <img [src]="url" height="200"> <br />
+            <input type='file' (change)="onSelectFile($event)">
+
+            <br/>
+            <button type="submit" class="btn btn-primary" [disabled]='!productForm.valid'>Submit</button>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" [hidden]="true" (click)="modal.close('Save click')">Save</button>
+        <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Save click')">Cancel</button>
+    </div>
+</ng-template>
+
+<!-- <ng-template #contentRegister let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Profile</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Username</label>
+              <input type="text" class="form-control" id="username1" [(ngModel)]="model1.username" name="username1" #username="ngModel"
+                required placeholder="Enter Username">
+              <small id="emailHelp1" class="form-text text-muted"></small>
+              <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+                  <div *ngIf="username?.errors?.required">
+                      Username is required
+                    </div>
+              </div>
+            </div>
+      
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" class="form-control" id="password" [(ngModel)]="model1.password" name="password"
+                #password="ngModel" required placeholder="Password">
+              <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+                  <div *ngIf="password?.errors?.required">
+                       Password is required
+                    </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Retype password</label>
+              <input type="password" class="form-control" id="confirmPassword" [(ngModel)]="model1.confirmPassword" name="confirmPassword"
+                #confirmPassword="ngModel" required compare="password" placeholder="Retype password">
+      
+              <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)" class="alert alert-danger">
+                <div *ngIf="confirmPassword?.errors?.required">
+                  Retype password is required
+                </div>
+                <div *ngIf="confirmPassword?.errors?.compare">
+                  Password not match
+                </div>
+              </div>
+            </div>
+      
+            <div class="form-group">
+                <label for="exampleInputEmail1">Fullname</label>
+                <input type="text" class="form-control" id="name1" [(ngModel)]="model1.name" name="name1" #name="ngModel"
+                  required placeholder="Enter Fullname">
+                <small id="emailHelp1" class="form-text text-muted"></small>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div *ngIf="name?.errors?.required">
+                        Fullname is required
+                      </div>
+                </div>
+              </div>
+      
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Email</label>
+                  <input type="email" class="form-control" id="email1" [(ngModel)]="model1.email" name="email1" #email="ngModel"
+                    required placeholder="Enter Email">
+                  <small id="emailHelp1" class="form-text text-muted"></small>
+                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+                      <div *ngIf="email?.errors?.required">
+                          Email is required
+                        </div>
+                  </div>
+                </div>
+      
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Address</label>
+                    <input type="text" class="form-control" id="address1" [(ngModel)]="model1.address" name="address1" #address="ngModel"
+                      required placeholder="Enter Address">
+                    <small id="emailHelp1" class="form-text text-muted"></small>
+                    <div *ngIf="address.invalid && (address.dirty || address.touched)" class="alert alert-danger">
+                        <div *ngIf="address?.errors?.required">
+                            Address is required
+                          </div>
+                    </div>
+                  </div>
+      
+                  <div class="form-group">
+                      <label for="exampleInputEmail1">Phone Number</label>
+                      <input type="text" class="form-control" id="phone1" [(ngModel)]="model1.phone" name="phone1" #phone="ngModel"
+                        required placeholder="Enter Username">
+                      <small id="emailHelp12" class="form-text text-muted"></small>
+                      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
+                          <div *ngIf="phone?.errors?.required">
+                              Phone Number is required
+                            </div>
+                      </div>
+                    </div>
+      
+      
+            <button type="submit" class="btn btn-primary" [disabled]='!registerForm.valid'>Submit</button>
+          </form>
+      
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" [hidden]="true" (click)="modal.close('Save click')">Save</button>
+          <button type="button" class="btn btn-outline-dark"  (click)="modal.dismiss('Save click')">Cancel</button>
+        </div>
+      </ng-template> -->
